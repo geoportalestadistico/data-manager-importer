@@ -1,0 +1,464 @@
+.breadcrum {
+    display: flex;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem;
+}
+
+.breadcrum span {
+    margin-right: 0.5rem;
+}
+
+.breadcrum_item {
+    background-color: whitesmoke;
+    border-radius: 1rem;
+    width: fit-content;
+    padding: 0.25rem 1rem;
+    cursor: pointer;
+}
+
+.breadcrum_item:hover {
+    background-color: gainsboro;
+}
+
+
+.breadcrum_img {
+    height: 1rem;
+}
+
+
+.big_button {
+    float: left;
+    background-color: whitesmoke;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* .big_button img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(193deg) brightness(103%) contrast(101%);
+} */
+
+
+
+.big_button:hover {
+    background-color: gainsboro;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.middle_button {
+    width: fit-content;
+    background-color: gainsboro;
+    margin: 1rem;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.middle_button:hover {
+    background-color: #bababa;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.small_button {
+    width: fit-content;
+    background-color: gainsboro;
+    margin: 0.25rem;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.small_button:hover {
+    background-color: #bababa;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.buttons_panel {
+    justify-content: space-evenly;
+    margin-top: 1rem;
+}
+
+.header {
+    background-color: whitesmoke;
+    padding: 1rem;
+}
+
+.tree {
+    background-color: gainsboro;
+    padding: 1rem;
+    margin-bottom: 2px;
+    margin-top: 2rem;
+}
+
+.branch {
+    background-color: whitesmoke;
+    padding: 1rem;
+    margin-bottom: 2px;
+}
+
+.new {
+    background-color: whitesmoke;
+    margin-bottom: 2px;
+    border: 2px;
+    border-style: dashed;
+    border-color: gainsboro;
+    text-align: center;
+    cursor: pointer;
+}
+
+.new:hover {
+    background-color: #dcd9d6;
+}
+
+.new_record {
+    background-color: #d1e7dd;
+    margin-bottom: 2px;
+    border: 2px;
+    border-style: dashed;
+    border-color: #198754;
+    text-align: center;
+    cursor: pointer;
+}
+
+.new_record:hover {
+    background-color: #198754;
+    color: white;
+    font-weight: bold;
+}
+
+.new_order {
+    background-color: #fff3cd;
+    margin-bottom: 2px;
+    border: 2px;
+    border-style: dashed;
+    border-color: #ffc107;
+    text-align: center;
+    cursor: pointer;
+}
+
+.new_order:hover {
+    background-color: #ffc107;
+    color: white;
+    font-weight: bold;
+}
+
+.source {
+    background-color: gainsboro;
+    padding: 1rem;
+    margin-bottom: 2px;
+}
+
+.source:hover {
+    background-color: #dcd9d6;
+}
+
+.image_button {
+    width: 1rem;
+}
+
+.button_div {
+    padding: 1rem;
+    background-color: whitesmoke;
+    margin-bottom: 2px;
+    border-left: 2px solid white;
+}
+
+.button_div:hover {
+    background-color: gainsboro;
+    cursor: pointer;
+}
+
+.footnote {
+    background-color: gainsboro;
+    padding: 1rem;
+    margin-bottom: 2px;
+}
+
+.footnote:hover {
+    background-color: #dcd9d6;
+}
+
+.image_button {
+    width: 1rem;
+}
+
+.id_div {
+    background-color: #ababab;
+    padding: 1rem;
+    margin-bottom: 2px;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.button_div {
+    padding: 1rem;
+    background-color: whitesmoke;
+    margin-bottom: 2px;
+    border-left: 2px solid white;
+}
+
+.button_div:hover {
+    background-color: gainsboro;
+    cursor: pointer;
+}
+
+.dimension {
+    background-color: gainsboro;
+    padding: 1rem;
+    margin-bottom: 2px;
+    margin-top: 2rem;
+}
+
+.member {
+    background-color: whitesmoke;
+    padding: 1rem;
+    margin-bottom: 2px;
+}
+
+.new {
+    background-color: whitesmoke;
+    margin-bottom: 2px;
+    border: 2px;
+    border-style: dashed;
+    border-color: gainsboro;
+    text-align: center;
+    cursor: pointer;
+}
+
+.new:hover {
+    background-color: #dcd9d6;
+}
+
+.source {
+    background-color: gainsboro;
+    padding: 1rem;
+    margin-bottom: 2px;
+}
+
+.source:hover {
+    background-color: #dcd9d6;
+}
+
+.image_button {
+    width: 1rem;
+}
+
+.button_div {
+    padding: 1rem;
+    background-color: whitesmoke;
+    margin-bottom: 2px;
+    border-left: 2px solid white;
+    text-align: center;
+}
+
+.button_div:hover {
+    background-color: gainsboro;
+    cursor: pointer;
+}
+
+.step {
+    padding: 1rem;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    transition: all 1000ms ease;
+}
+
+.good {
+    color: green;
+    font-weight: bold;
+}
+
+.wrong {
+    color: red;
+    font-weight: bold;
+}
+
+#tbody_response {
+    max-height: 75vh;
+    overflow-y: auto;
+}
+
+.fa-check {
+    color: green;
+}
+
+.fa-remove {
+    color: red;
+}
+
+.dimension_tr {
+    font-style: italic;
+    font-size: small;
+}
+
+.value_tr {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+.edit_tool {
+    text-align: center;
+    cursor: pointer;
+}
+
+.edit_tool:hover {
+    background-color: gainsboro;
+}
+
+.delete_tool {
+    text-align: center;
+    cursor: pointer;
+}
+
+.delete_tool:hover {
+    background-color: gainsboro;
+}
+
+
+
+.save_tool {
+    text-align: center;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.save_tool:hover {
+    background-color: gainsboro;
+}
+
+.input-group-append {
+    cursor: pointer;
+}
+
+.header_abm {
+    display: none;
+}
+
+.message_abm {
+    display: none;
+}
+
+.buttons_abm {
+    display: none;
+}
+
+.mb-3 {
+    padding: 0.5rem;
+}
+
+.mb-3:hover {
+    background-color: whitesmoke;
+}
+
+.selected_row {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.unactive_svg {
+    filter: invert(98%) sepia(0%) saturate(409%) hue-rotate(145deg) brightness(98%) contrast(75%);
+}
+
+.unactive_button {
+    pointer-events: none;
+}
+
+.unactive_button img {
+    filter: invert(98%) sepia(0%) saturate(409%) hue-rotate(145deg) brightness(98%) contrast(75%);
+}
+
+.off {
+    display: none;
+}
+
+.red {
+    filter: invert(34%) sepia(82%) saturate(1050%) hue-rotate(334deg) brightness(95%) contrast(96%);
+}
+
+.green {
+    filter: invert(42%) sepia(86%) saturate(357%) hue-rotate(100deg) brightness(85%) contrast(100%);
+}
+
+.wrong_input {
+    color: red;
+    font-weight: bold;
+    border-color: red;
+}
+
+.wrong_tr {
+    background-color: #f8d7da;
+    border-color: red;
+    color: red;
+    font-weight: bold;
+}
+
+.image_svg {
+    transition: all 200ms ease;
+    height: 1rem;
+    filter: invert(0%) sepia(96%) saturate(0%) hue-rotate(276deg) brightness(100%) contrast(100%);
+    cursor: pointer;
+}
+
+.image_svg_inactive {
+    transition: all 200ms ease;
+    height: 1rem;
+    filter: invert(89%) sepia(12%) saturate(72%) hue-rotate(355deg) brightness(91%) contrast(90%);
+    cursor: pointer;
+}
+
+.image_svg:hover {
+    filter: invert(29%) sepia(62%) saturate(5729%) hue-rotate(166deg) brightness(99%) contrast(102%);
+}
+
+.sort:hover {
+    cursor: pointer;
+    background-color: gainsboro;
+}
+
+.sort_image {
+    margin-left: 0.5rem;
+}
+
+.skeleton_div {
+    width: 100%;
+    height: 3.5rem;
+    border: 1px solid white;
+    background-image: linear-gradient(to right,
+            white 0%,
+            whitesmoke 10%,
+            gainsboro 50%,
+            whitesmoke 90%,
+            white 100%);
+    background-repeat: no-repeat;
+    background-size: 200% 400px;
+    animation: shimmer 2s linear infinite;
+}
+
+.skeleton_tr {
+    width: 100%;
+    height: 3rem;
+    border: 1px solid white;
+    background-image: linear-gradient(to right,
+            white 0%,
+            whitesmoke 10%,
+            gainsboro 50%,
+            whitesmoke 90%,
+            white 100%);
+    background-repeat: no-repeat;
+    background-size: 200% 400px;
+    animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -50% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}

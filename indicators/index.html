@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <title>Gestor datos estadísticos</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../config/main.js"></script>
+    <script src="./script.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <img src="../images/logos/cepal.png" style="float: right;height: 3rem;">
+            <h3>Gestor de Datos Estadísticos. Indicadores</h3>
+        </div>
+    </div>
+    <div class="container">
+        <div class="breadcrum">
+            <span id="link_home" class="breadcrum_item" onclick="location.href='../'"><img class="breadcrum_img"
+                    src="../images/icons/house-solid.svg"></span>
+            <span id="link_here" class="breadcrum_item" onclick="location.href='.'">Indicadores</span>
+            <span onclick="location.href='../?s=1'" id="logout_btn" class="breadcrum_item" style="margin-left:auto;"><img
+                    class="image_svg" src="../images/icons/right-from-bracket-solid.svg"
+                    style="margin-right: 0.5rem;">Cerrar sesión</span>
+            <span id="login_btn" onclick="location.href='../'" class="breadcrum_item off"
+                style="margin-left:auto;"><img class="image_svg" src="../images/icons/right-to-bracket-solid.svg"
+                    style="margin-right: 0.5rem;">Iniciar sesión</span>
+        </div>
+        <div id="header">
+            <button type="button" class="btn btn-success login_button" onclick="add_indicator()">Agregar nuevo
+                indicador</button>
+        </div>
+        <div class="row">
+            <div id="content" class="col-7" style="margin-top:2rem;">
+                <div id="indicators"></div>
+            </div>
+            <div class="col-5 abm" id="abm" style="display: none;">
+                <div id="header_abm">
+                    <h3 id="header_add" class="header_abm">Agregar nuevo indicador</h3>
+                    <h3 id="header_delete" class="header_abm">Eliminar indicador</h3>
+                    <h3 id="header_edit" class="header_abm">Editar indicador</h3>
+                </div>
+                <form action="" id="indicator_form">
+                    <div class="mb-3 mt-3" style="background-color: gainsboro;padding: 1rem;">
+                        <img src="../images/icons/circle-question-solid.svg"
+                            style="height: 1rem;float:right;margin-left: 1rem;cursor: pointer;" data-bs-toggle="tooltip"
+                            title="El nombre del indicador en español es obligatorio">
+                        <label for="descripcion" class="form-label">Nombre del indicador: </label><span
+                            class="badge bg-warning" data-bs-toggle="collapse" href="#hidden_descripcion"
+                            style="cursor: pointer;float:right;">Agregar otros idiomas</span>
+                        <input type="text" class="form-control" id="descripcion" placeholder="Nombre del indicador"
+                            name="descripcion">
+                    </div>
+                    <div id="hidden_descripcion" class="collapse">
+                        <div class="mb-3 mt-3">
+                            <label for="descripcion_ingles" class="form-label">Nombre del indicador en
+                                <b>inglés</b>:</label>
+                            <input type="text" class="form-control" id="descripcion_ingles"
+                                placeholder="Nombre del indicador en inglés" name="descripcion_ingles">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="descripcion_frances" class="form-label">Nombre del indicador en
+                                <b>francés</b>:</label>
+                            <input type="text" class="form-control" id="descripcion_frances"
+                                placeholder="Nombre del indicador en francés" name="descripcion_frances">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="descripcion_portugues" class="form-label">Nombre del indicador en
+                                <b>portugués</b>:</label>
+                            <input type="text" class="form-control" id="descripcion_portugues"
+                                placeholder="Nombre del indicador portugués" name="descripcion_portugues">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3" id="div_dimensiones_asociadas">
+                        <img src="../images/icons/circle-question-solid.svg"
+                            style="height: 1rem;float:right;margin-left: 1rem;cursor: pointer;"
+                            onmouseover="highlight('div_dimensiones_asociadas')" data-bs-toggle="tooltip"
+                            title="Seleccionar al menos 2 dimensiones">
+                        <label for="dimensiones_asociadas" class="form-label">Dimensiones asociadas (selección
+                            múltiple):</label>
+                        <div id="message_dimensions">
+                            <div class="alert alert-danger message_abm" style="margin-top:1rem;"
+                                id="error_dim_numbertime">
+                                <strong>Atención!</strong> Sólo se puede seleccionar una única <span
+                                    style="color:blue;font-weight: bold;">dimensión temporal</span> por indicador
+                            </div>
+                            <div class="alert alert-danger message_abm" style="margin-top:1rem;"
+                                id="error_dim_geospatial">
+                                <strong>Atención!</strong> Sólo se puede seleccionar una única <span
+                                    style="color:red;font-weight: bold;">dimensión geoespacial</span> por indicador
+                            </div>
+                            <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="error_dim_number">
+                                <strong>Atención!</strong> Se necesita definir al menos dos dimensiones por indicador
+                            </div>
+                            <div class="alert alert-success message_abm" style="margin-top:1rem;"
+                                id="success_dim_choice">
+                                <strong>Éxito!</strong> Configuración de dimensiones adecuada
+                            </div>
+                            <div class="alert alert-warning message_abm" style="margin-top:1rem;" id="error_dim_time">
+                                <strong>Atención!</strong> Sin <span style="color:blue;font-weight: bold;">unidades de
+                                    tiempo</span> no será posible utilizar herramientas de análisis temporal
+                            </div>
+                        </div>
+                        <select multiple class="form-select" id="dimensiones_asociadas" name="dimensiones_asociadas"
+                            oninput="check_dimensions()">
+                        </select>
+                        <div id="highlight_text_dimensions"></div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="unidad_de_medida" class="form-label">Unidad de medida: </label><span
+                            class="badge bg-warning" data-bs-toggle="collapse" href="#hidden_unidad_de_medida"
+                            style="cursor: pointer;float:right;">Agregar otros idiomas</span>
+                        <input type="text" class="form-control" id="unidad_de_medida" placeholder="Unidad de medida"
+                            name="unidad_de_medida">
+                    </div>
+                    <div id="hidden_unidad_de_medida" class="collapse">
+                        <div class="mb-3 mt-3">
+                            <label for="unidad_de_medida_ingles" class="form-label">Unidad de medida en
+                                <b>inglés</b>:</label>
+                            <input type="text" class="form-control" id="unidad_de_medida_ingles"
+                                placeholder="Unidad de medida inglés" name="unidad_de_medida_ingles">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="unidad_de_medida_frances" class="form-label">Unidad de medida en
+                                <b>francés</b>:</label>
+                            <input type="text" class="form-control" id="unidad_de_medida_frances"
+                                placeholder="Unidad de medida francés" name="unidad_de_medida_frances">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="unidad_de_medida_portugues" class="form-label">Unidad de medida en
+                                <b>portugués</b>:</label>
+                            <input type="text" class="form-control" id="unidad_de_medida_portugues"
+                                placeholder="Unidad de medida portugués" name="unidad_de_medida_portugues">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="orden" class="form-label">Orden: </label>
+                        <input type="number" class="form-control" id="orden" placeholder="Orden" name="orden">
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="nota" class="form-label">Nota: </label><span class="badge bg-warning"
+                            data-bs-toggle="collapse" href="#hidden_nota" style="cursor: pointer;float:right;">Agregar
+                            otros idiomas</span>
+                        <input type="text" class="form-control" id="nota" placeholder="Nota" name="nota">
+                    </div>
+                    <div id="hidden_nota" class="collapse">
+                        <div class="mb-3 mt-3">
+                            <label for="nota_ingles" class="form-label">Nota en
+                                <b>inglés</b>:</label>
+                            <input type="text" class="form-control" id="nota_ingles" placeholder="Nota inglés"
+                                name="nota_ingles">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="nota_frances" class="form-label">Nota en
+                                <b>francés</b>:</label>
+                            <input type="text" class="form-control" id="nota_frances" placeholder="Nota francés"
+                                name="nota_frances">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="nota_portugues" class="form-label">Nota en
+                                <b>portugués</b>:</label>
+                            <input type="text" class="form-control" id="nota_portugues" placeholder="Nota portugués"
+                                name="nota_portugues">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="tipo_dato" class="form-label">Tipo de dato: </label><span class="badge bg-warning"
+                            data-bs-toggle="collapse" href="#hidden_tipo_dato"
+                            style="cursor: pointer;float:right;">Agregar otros idiomas</span>
+                        <input type="text" class="form-control" id="tipo_dato" placeholder="Tipo de dato"
+                            name="tipo_dato">
+                    </div>
+                    <div id="hidden_tipo_dato" class="collapse">
+                        <div class="mb-3 mt-3">
+                            <label for="tipo_dato_ingles" class="form-label">Tipo de dato en
+                                <b>inglés</b>:</label>
+                            <input type="text" class="form-control" id="tipo_dato_ingles"
+                                placeholder="Tipo de dato inglés" name="tipo_dato_ingles">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="tipo_dato_frances" class="form-label">Tipo de dato en
+                                <b>francés</b>:</label>
+                            <input type="text" class="form-control" id="tipo_dato_frances"
+                                placeholder="Tipo de dato francés" name="tipo_dato_frances">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="tipo_dato_portugues" class="form-label">Tipo de dato en
+                                <b>portugués</b>:</label>
+                            <input type="text" class="form-control" id="tipo_dato_portugues"
+                                placeholder="Tipo de dato portugués" name="tipo_dato_portugues">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="metodologia_calculo" class="form-label">Metodología de cálculo: </label><span
+                            class="badge bg-warning" data-bs-toggle="collapse" href="#hidden_metodologia_calculo"
+                            style="cursor: pointer;float:right;">Agregar otros idiomas</span>
+                        <input type="text" class="form-control" id="metodologia_calculo"
+                            placeholder="Metodología de cálculo" name="metodologia_calculo">
+                    </div>
+                    <div id="hidden_metodologia_calculo" class="collapse">
+                        <div class="mb-3 mt-3">
+                            <label for="metodologia_calculo_ingles" class="form-label">Metodología de cálculo en
+                                <b>inglés</b>:</label>
+                            <input type="text" class="form-control" id="metodologia_calculo_ingles"
+                                placeholder="Metodología de cálculo inglés" name="metodologia_calculo_ingles">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="metodologia_calculo_frances" class="form-label">Metodología de cálculo en
+                                <b>francés</b>:</label>
+                            <input type="text" class="form-control" id="metodologia_calculo_frances"
+                                placeholder="Metodología de cálculo francés" name="metodologia_calculo_frances">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="metodologia_calculo_portugues" class="form-label">Metodología de cálculo en
+                                <b>portugués</b>:</label>
+                            <input type="text" class="form-control" id="metodologia_calculo_portugues"
+                                placeholder="Metodología de cálculo portugués" name="metodologia_calculo_portugues">
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3 mt-3">
+                        <label for="comentarios" class="form-label">Comentarios: </label><span class="badge bg-warning"
+                            data-bs-toggle="collapse" href="#hidden_comentarios"
+                            style="cursor: pointer;float:right;">Agregar otros idiomas</span>
+                        <input type="text" class="form-control" id="comentarios" placeholder="Comentarios"
+                            name="comentarios">
+                    </div>
+                    <div id="hidden_comentarios" class="collapse">
+                        <div class="mb-3 mt-3">
+                            <label for="comentarios_ingles" class="form-label">Comentarios en
+                                <b>inglés</b>:</label>
+                            <input type="text" class="form-control" id="comentarios_ingles"
+                                placeholder="Comentarios inglés" name="comentarios_ingles">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="comentarios_frances" class="form-label">Comentarios en
+                                <b>francés</b>:</label>
+                            <input type="text" class="form-control" id="comentarios_frances"
+                                placeholder="Comentarios francés" name="comentarios_frances">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="comentarios_portugues" class="form-label">Comentarios en
+                                <b>portugués</b>:</label>
+                            <input type="text" class="form-control" id="comentarios_portugues"
+                                placeholder="Comentarios portugués" name="comentarios_portugues">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="numero_decimales_consulta" class="form-label">Número de decimales en la consulta:
+                        </label>
+                        <input type="number" class="form-control" id="numero_decimales_consulta"
+                            placeholder="Número de decimales en la consulta" name="numero_decimales_consulta">
+                    </div>
+
+
+                    <div class="mb-3 mt-3">
+                        <label for="fecha_ultima_actualizacion_revision" class="form-label">Fecha de última revisión:
+                        </label>
+                        <div class="input-group date" id="datepicker">
+                            <input type="text" class="form-control" id="fecha_ultima_actualizacion_revision"
+                                placeholder="Fecha de última revisión" />
+                            <span class="input-group-append">
+                                <span class="input-group-text bg-light d-block">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="actualizado_por" class="form-label">Actualizado por: </label>
+                        <input type="text" class="form-control" id="actualizado_por" placeholder="Actualizado por"
+                            name="actualizado_por">
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="revisado_por" class="form-label">Revisado por: </label>
+                        <input type="text" class="form-control" id="revisado_por" placeholder="Revisado por"
+                            name="revisado_por">
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="sdmx" class="form-label">SDMX: </label>
+                        <input type="text" class="form-control" id="sdmx" placeholder="Revisado por" name="sdmx">
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="indicador_listo" class="form-label">Indicador listo: </label>
+                        <input class="form-check-input" type="checkbox" name="indicador_listo" id="indicador_listo">
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="publicado" class="form-label">Publicado: </label>
+                        <input class="form-check-input" type="checkbox" name="publicado" id="publicado">
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="areas" class="form-label">Áreas temáticas (selección múltiple):</label>
+                        <select multiple class="form-select" id="areas" name="areas">
+                        </select>
+                    </div>
+                </form>
+
+                <div>
+                    <div class="alert alert-success message_abm" style="margin-top:1rem;" id="success_add">
+                        <strong>Éxito!</strong> Nuevo indicador creado
+                    </div>
+                    <div class="alert alert-success message_abm" style="margin-top:1rem;" id="success_edit">
+                        <strong>Éxito!</strong> Indicador modificado
+                    </div>
+                    <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="error_add">
+                        <strong>Error!</strong> No se pudo crear la nueva nota
+                        <div id="error_add_content"></div>
+                    </div>
+                    <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="error_edit">
+                        <strong>Error!</strong> No se pudo modificar el indicador
+                        <div id="error_edit_content"></div>
+                    </div>
+                    <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="danger_delete">
+                        <strong>Atención!</strong> Estás a punto de eliminar el indicador
+                        <span id="danger_content" style="font-weight: bold;"></span>
+                    </div>
+                    <div class="alert alert-warning message_abm" style="margin-top:1rem;" id="success_delete">
+                        <strong>Éxito!</strong> Indicador eliminado
+                    </div>
+                </div>
+
+                <div>
+                    <div id="buttons_delete" class="buttons_abm">
+                        <button type="button" class="btn btn-danger" onclick="cancel()">Cancelar</button>
+                        <button type="button" class="btn btn-warning" id="delete_button">Eliminar</button>
+                    </div>
+                    <div id="buttons_add" class="buttons_abm">
+                        <button type="button" class="btn btn-danger" onclick="cancel()">Cancelar</button>
+                        <button type="button" class="btn btn-success save"
+                            onclick="save_add_indicator()">Guardar</button>
+                    </div>
+                    <div id="buttons_edit" class="buttons_abm">
+                        <button type="button" class="btn btn-danger" onclick="cancel()">Cancelar</button>
+                        <button type="button" class="btn btn-success save" id="edit_button">Guardar</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>

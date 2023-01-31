@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <title>Gestor datos estadísticos</title>
+    <script src="../config/main.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <img src="../images/logos/cepal.png" style="float: right;height: 3rem;">
+            <h3>Gestor de Datos Estadísticos. Indicadores</h3>
+        </div>
+    </div>
+    <div class="container">
+        <div class="breadcrum">
+            <span id="link_home" class="breadcrum_item" onclick="location.href='../'"><img class="breadcrum_img"
+                    src="../images/icons/house-solid.svg"></span>
+            <span id="link_parent" class="breadcrum_item" onclick="location.href='../indicators/'">Indicadores</span>
+            <span id="link_here" class="breadcrum_item">Editar datos</span>
+            <span onclick="location.href='../?s=1'" id="logout_btn" class="breadcrum_item" style="margin-left:auto;"><img
+                    class="image_svg" src="../images/icons/right-from-bracket-solid.svg"
+                    style="margin-right: 0.5rem;">Cerrar sesión</span>
+            <span id="login_btn" onclick="location.href='../'" class="breadcrum_item off"
+                style="margin-left:auto;"><img class="image_svg" src="../images/icons/right-to-bracket-solid.svg"
+                    style="margin-right: 0.5rem;">Iniciar sesión</span>
+        </div>
+        <div style="padding: 0.5rem;">
+            <button type="button" class="btn btn-success login_button" id="button_add" onclick="add_record()"
+                style="float: right;">Agregar nuevo registro</button>
+            <button type="button" class="btn btn-light" id="button_add" onclick="toggle_filter()"
+                style="float: right;margin-right: 0.5rem;" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Filtrar registros"><img src="../images/icons/filter-solid.svg" class="image_svg"></button>
+            <button type="button" class="btn btn-light login_td" id="button_add" onclick="massive_edit()"
+                style="float: right;margin-right: 0.5rem;" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Edición masiva"><img src="../images/icons/list-check-solid.svg" class="image_svg"></button>
+            <h4 id="indicator_name"></h4>
+        </div>
+
+        <div id="message" class="row">
+            <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="error_dimension">
+                <strong>Error!</strong> La combinación de dimensiones ya existe
+            </div>
+            <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="error_dimension_undefined">
+                <strong>Error!</strong> Deben establecerse todas las dimensiones
+            </div>
+            <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="error_value">
+                <strong>Error!</strong> El valor no puede ser nulo
+            </div>
+            <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="error_source">
+                <strong>Error!</strong> La fuente no puede estar vacía.<br>
+                Seleccionar una fuente o crear una <a href="../sources/">aquí</a>
+            </div>
+            <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="error_save_edit">
+                <strong>Error!</strong> No es posible grabar hasta que sean corregidos los errores
+            </div>
+            <div class="alert alert-success message_abm" style="margin-top:1rem;" id="success_save_edit">
+                <strong>Éxito!</strong> Registro modificado
+            </div>
+            <div class="alert alert-success message_abm" style="margin-top:1rem;" id="success_delete">
+                <strong>Éxito!</strong> Registro eliminado
+            </div>
+            <div class="alert alert-warning message_abm" style="margin-top:1rem;" id="warning_initial">
+                <strong>Atención!</strong> Este indicador no tiene registros
+            </div>
+            <div class="alert alert-warning message_abm" style="margin-top:1rem;" id="warning_cancel">
+                <strong>Atención!</strong> Operación cancelada. Volviendo a cargar registros.
+            </div>
+            <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="warning_delete_massive">
+                <strong>Atención!</strong> Estás a punto de eliminar <b id="number_editing_records"></b>
+                <b>registros</b>. Esta acción no se puede deshacer.
+                <button type="button" class="btn btn-warning" onclick="cancel_record()"
+                    style="margin-left: 3rem;">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="delete_massive_button"
+                    onclick="confirm_massive_edit_delete()" style="margin-left: 1rem;">Eliminar</button>
+            </div>
+            <div class="alert alert-warning message_abm" style="margin-top:1rem;" id="warning_massive_editing">
+                <strong>Atención!</strong> Aplicando cambios
+            </div>
+            <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="warning_delete_edit">
+                <strong>Atención!</strong> Estás a punto de eliminar un registro. Esta acción no se puede deshacer.
+                <button type="button" class="btn btn-warning" onclick="cancel_record()"
+                    style="margin-left: 3rem;">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="delete_button"
+                    style="margin-left: 1rem;">Eliminar</button>
+            </div>
+        </div>
+        <div class="row" id="search" style="display: none;padding: 0 0 0.4rem 0;background-color: gainsboro;">
+            <div class="col-6">
+                <input type="text" id="search_input" onkeyup="filterTable()" class="form-control mt-3"
+                    placeholder="Filtrar registros" title="Type in a name">
+            </div>
+            <div style="padding:1rem;" class="col-6">
+                <form id="filter_selector" style="padding-top: 0.5rem;"></form>
+            </div>
+        </div>
+        <div id="massive_edit_tools" class="off"
+            style="padding: 1rem;background-color: gainsboro;justify-content: flex-start;align-items: center;margin:0.5rem 0;    margin-right: calc(-.5 * var(--bs-gutter-x));margin-left: calc(-.5 * var(--bs-gutter-x));">
+
+            <button type="button" class="btn btn-light unactive_button massive_edit" id="massive_edit_delete"
+                onclick="massive_edit_delete()" style="margin-right: 0.5rem;" data-bs-toggle="tooltip"
+                data-bs-placement="top" aria-label="Edición masiva"
+                data-bs-original-title="Eliminar todos los registros seleccionados"><img
+                    src="../images/icons/trash-can-solid.svg" class="image_svg"></button>
+            <button type="button" class="btn btn-light unactive_button massive_edit" id="massive_edit_edit"
+                onclick="massive_edit_edit()" style="margin-right: 0.5rem;" data-bs-toggle="tooltip"
+                data-bs-placement="top" aria-label="Edición masiva"
+                data-bs-original-title="Aplicar modificación a todos los registros seleccionados"><img
+                    src="../images/icons/pencil-solid.svg" class="image_svg"></button>
+            <div id="massive_edit_options" class="off">
+                <select class="form-select" style="width: min-content;" onchange="select_edit_field()"
+                    id="field_edit_selector">
+                    <option id="edit_field_hint">Campo a editar</option>
+                    <option value="sources">Fuentes</option>
+                    <option value="footnotes">Notas</option>
+                    <option value="values">Valor</option>
+                </select>
+                <select multiple id="edit_footnotes" class="form-select off edit_selector"
+                    style="width: min-content;max-width: 15rem;margin-left:0.5rem;" placeholder="Notas">
+                </select>
+                <select id="edit_sources" class="form-select off edit_selector"
+                    style="width: min-content;max-width: 15rem;margin-left:0.5rem;" placeholder="Fuente">
+                </select>
+                <input id="edit_values" type="text" class="form-control off edit_selector" placeholder="Valores"
+                    style="max-width: 10rem;margin-left:0.5rem;">
+                <div id="edit_massive_buttons" class="off" style="margin-left:0.5rem;">
+                    <button type="button" class="btn btn-success" id="confirm_massive_edit">Aceptar</button>
+                    <button type="button" class="btn btn-danger">Cancelar</button>
+                </div>
+            </div>
+
+            <span style="float: right;margin-left: auto;"><b id="number_selected">0</b> registros seleccionados</span>
+            <span id="selected_counter"
+                style="float: right;color: red;font-weight: bold;margin-left:0.5rem;display:none;">(<b
+                    style="font-weight: bold;" id="number_selected_hidden">0</b> ocultos)</span>
+            <div class="form-check" style="margin-left:1rem;">
+                <input class="form-check-input" type="checkbox" id="check_hidden_selected" name="check_hidden_selected"
+                    value="0" oninput="toggle_selected_counter()">
+                <label class="form-check-label">Aplicar a ocultos</label>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table table-striped table-hover" id="data_table" style="display: none;">
+                <thead class="header_table" id="table_header">
+                    <tr id="thead">
+                        <th style="width: 3rem;"><input id="general_checkbox" class="form-check-input off"
+                                type="checkbox" oninput="toggle_all()"></th>
+                        <th style="width: 3rem;"></th>
+                        <th class="sort" onclick="sortTable('tbody',7,'number')">ID<img id="tbody_sort_7"
+                                class="image_svg sort_image" src="../images/icons/arrows-up-down-solid.svg"></th>
+                        <th class="sort" onclick="sortTable('tbody',8,'number')">Fuente<img id="tbody_sort_8"
+                                class="image_svg sort_image" src="../images/icons/arrows-up-down-solid.svg"></th>
+                        <th class="sort" onclick="sortTable('tbody',9,'number')">Notas<img id="tbody_sort_9"
+                                class="image_svg sort_image" src="../images/icons/arrows-up-down-solid.svg"></th>
+                        <th class="sort" onclick="sortTable('tbody',10,'number')">Valor<img id="tbody_sort_10"
+                                class="image_svg sort_image" src="../images/icons/arrows-up-down-solid.svg"></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+            </table>
+        </div>
+        <div class="skeleton_tr" style="margin-top: 2rem;"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+        <div class="skeleton_tr"></div>
+    </div>
+
+
+</body>
+
+</html>

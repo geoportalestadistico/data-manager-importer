@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>Gestor datos estadísticos</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../config/main.js"></script>
+    <script src="./script.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <img src="../images/logos/cepal.png" style="float: right;height: 3rem;">
+            <h3>Gestor de Datos Estadísticos. Miembros de dimensiones</h3>
+        </div>
+    </div>
+    <div class="container">
+        <div class="breadcrum">
+            <span id="link_home" class="breadcrum_item" onclick="location.href='../'"><img class="breadcrum_img"
+                    src="../images/icons/house-solid.svg"></span>
+            <span id="link_parent" class="breadcrum_item" onclick="location.href='../dimensions/'">Dimensiones</span>
+            <span id="link_here" class="breadcrum_item" onclick="location.href='.'">Miembros de dimensiones</span>
+            <span onclick="location.href='../?s=1'" id="logout_btn" class="breadcrum_item" style="margin-left:auto;"><img
+                class="image_svg" src="../images/icons/right-from-bracket-solid.svg"
+                style="margin-right: 0.5rem;">Cerrar sesión</span>
+        <span id="login_btn" onclick="location.href='../'" class="breadcrum_item off"
+            style="margin-left:auto;"><img class="image_svg" src="../images/icons/right-to-bracket-solid.svg"
+                style="margin-right: 0.5rem;">Iniciar sesión</span>
+        </div>
+        <div class="row">
+            <div class="col-7" id="members_div">
+                <h4 id="title_dimension"></h4>
+                <button style="margin-bottom: 0.5rem;" type="button" class="btn btn-success login_button" id="add"
+                    onclick="add_member()">Agregar miembro</button>
+                <button style="margin-bottom: 0.5rem;" type="button" class="btn btn-success login_button" id="massive_edit"
+                    onclick="massive_edit()">Edición masiva</button>
+                <button style="margin-bottom: 0.5rem;" type="button" class="btn btn-danger off" id="cancel_add"
+                    onclick="cancel_add()">Cancelar</button>
+                <div style="float:right">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="members_id_switch" name="darkmode"
+                            value="no" onchange="toggle_id('member')">
+                        <label class="form-check-label" for="members_id_switch">Mostrar ID</label>
+                    </div>
+                </div>
+                <h5 id="dimension_title"></h5>
+                <div class="alert alert-warning message_abm" style="margin-top:1rem;" id="warning_members">
+                    <strong>Atención!</strong> Esta dimensión aún no tiene miembros. Click <a id="edit_member_url"
+                        href="">aquí</a> para agregar dimensiones
+                </div>
+                <div id="members"></div>
+            </div>
+            <div class="col-5 abm" id="abm" style="display: none;">
+                <div id="header_abm">
+                    <h3 id="header_add" class="header_abm">Agregar nuevo miembro</h3>
+                    <h3 id="header_delete" class="header_abm">Eliminar miembro de la dimensión</h3>
+                    <h3 id="header_edit" class="header_abm">Editar miembro de la dimensión</h3>
+                    <h3 id="header_order" class="header_abm">Reordenar miembro de la dimensión</h3>
+                </div>
+                <form action="" id="member_form">
+                    <div class="mb-3 mt-3" style="background-color: gainsboro;padding: 1rem;">
+                        <img src="../images/icons/circle-question-solid.svg"
+                            style="height: 1rem;float:right;margin-left: 1rem;cursor: pointer;" data-bs-toggle="tooltip"
+                            title="El nombre de la dimensión en español es obligatoria">
+                        <label for="descripcion" class="form-label">Nombre: </label><span class="badge bg-warning"
+                            data-bs-toggle="collapse" href="#hidden_descripcion"
+                            style="cursor: pointer;float:right;">Agregar otros idiomas</span>
+                        <input type="text" class="form-control" id="descripcion" placeholder="Nombre"
+                            name="descripcion">
+                    </div>
+                    <div id="hidden_descripcion" class="collapse">
+                        <div class="mb-3 mt-3">
+                            <label for="descripcion_ingles" class="form-label">Nombre en
+                                <b>inglés</b>:</label>
+                            <input type="text" class="form-control" id="descripcion_ingles"
+                                placeholder="Nombre en inglés" name="descripcion_ingles">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="descripcion_frances" class="form-label">Nombre en
+                                <b>francés</b>:</label>
+                            <input type="text" class="form-control" id="descripcion_frances"
+                                placeholder="Nombre en francés" name="descripcion_frances">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="descripcion_portugues" class="form-label">Nombre en
+                                <b>portugués</b>:</label>
+                            <input type="text" class="form-control" id="descripcion_portugues"
+                                placeholder="Nombre en portugués" name="descripcion_portugues">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="orden" class="form-label">Orden: </label>
+                        <input type="number" class="form-control" id="orden" placeholder="Orden" name="orden">
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="sdmx" class="form-label">SDMX: </label>
+                        <input type="text" class="form-control" id="sdmx" placeholder="Código SDMX" name="sdmx">
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="code" class="form-label">Código: </label>
+                        <input type="text" class="form-control" id="code" placeholder="Código" name="code">
+                    </div>
+
+                </form>
+
+                <div>
+                    <div class="alert alert-success message_abm" style="margin-top:1rem;" id="success_add">
+                        <strong>Éxito!</strong> Nuevo miembro de dimensión creado
+                    </div>
+                    <div class="alert alert-success message_abm" style="margin-top:1rem;" id="success_edit">
+                        <strong>Éxito!</strong> Dimensión modificada
+                    </div>
+                    <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="error_add">
+                        <strong>Error!</strong> No se pudo crear la nueva dimensión
+                        <div id="error_add_content"></div>
+                    </div>
+                    <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="error_edit">
+                        <strong>Error!</strong> No se pudo modificar la dimensión
+                        <div id="error_edit_content"></div>
+                    </div>
+                    <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="danger_delete">
+                        <strong>Atención!</strong> Estás a punto de eliminar un miembro de la dimensión
+                        <span id="danger_content" style="font-weight: bold;"></span>
+                    </div>
+                    <div class="alert alert-warning message_abm" style="margin-top:1rem;" id="success_delete">
+                        <strong>Éxito!</strong> miembro de la imensión eliminado
+                    </div>
+                    <div class="alert alert-success message_abm" style="margin-top:1rem;" id="success_order">
+                        <strong>Atención!</strong> seleccionar la nueva ubicación en la dimensión
+                    </div>
+                    <div class="alert alert-success message_abm" style="margin-top:1rem;" id="warning_order">
+                        <strong>Atención!</strong> seleccionar la nueva ubicación en la dimensión
+                    </div>
+                    <div class="alert alert-warning message_abm" style="margin-top:1rem;" id="warning_order2">
+                        <strong>Atención!</strong> esta operación cambiará de ubicación de
+                        <b id="order_content2"></b>
+                    </div>
+                    <div class="alert alert-danger message_abm" style="margin-top:1rem;" id="danger_order">
+                        <strong>Atención!</strong> esta operación cambia la propiedad "orden" de otros miembros
+                        <ul id="order_content"></ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div id="buttons_delete" class="buttons_abm">
+                        <button type="button" class="btn btn-danger" onclick="cancel()">Cancelar</button>
+                        <button type="button" class="btn btn-warning" id="delete_button">Eliminar</button>
+                    </div>
+                    <div id="buttons_add" class="buttons_abm">
+                        <button type="button" class="btn btn-danger" onclick="cancel()">Cancelar</button>
+                    </div>
+                    <div id="buttons_edit" class="buttons_abm">
+                        <button type="button" class="btn btn-danger" onclick="cancel()">Cancelar</button>
+                        <button type="button" class="btn btn-success" id="edit_button">Guardar</button>
+                    </div>
+                    <div id="buttons_order" class="buttons_abm">
+                        <button type="button" class="btn btn-danger" onclick="cancel()">Cancelar</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-5 abm" id="abm_massive" style="display: none;">
+                <div id="header_abm">
+                    <h3 id="header_add" class="">Edición masiva</h3>
+                </div>
+                <div class="row d-flex" style="justify-content: space-around;margin-bottom: 1rem;">
+                    <div class="small_button" onclick="download_excel()"><img src="../images/icons/download-solid.svg"
+                            style="height: 1rem;margin-right: 0.5rem;"><br>Descargar plantilla excel</div>
+                    <div class="small_button" onclick="upload_excel()"><img src="../images/icons/upload-solid.svg"
+                            style="height: 1rem;margin-right: 0.5rem;"><br>Importar datos de excel</div>
+
+                </div>
+                <div id="upload_excel" style="display:none;" class="step">
+                    <h5>Cargar archivo</h5>
+                    <input type="file" class="btn btn-dark" id="input_dom_element" onchange=""
+                        style="width: 100%;margin-bottom: 1rem;"></input>
+                    <button id="process_data" type="button" class="btn btn-success" style="display: none;"
+                        onclick="proccess_imported_data()">Importar datos cargados</button>
+                    <button id="process_data_cancel" type="button" class="btn btn-danger" style="display: none;"
+                        onclick="cancel_add()">Cancel</button>
+                </div>
+                <div id="result_import"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
